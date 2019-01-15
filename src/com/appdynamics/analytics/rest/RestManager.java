@@ -1,7 +1,7 @@
 package com.appdynamics.analytics.rest;
 
 import java.io.StringReader;
-import java.util.HashMap;
+import java.util.List;
 
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
@@ -12,6 +12,7 @@ import org.json.simple.parser.JSONParser;
 
 import com.appdynamics.analytics.ConfigManager;
 import com.appdynamics.analytics.IConfig;
+import com.appdynamics.analytics.sla.ActiveRecord;
 import com.appdynamics.analytics.util.Range;
 
 public class RestManager {
@@ -38,7 +39,24 @@ public class RestManager {
 		return results;
 	}
 
-	public void postFailedSLAs(ConfigManager mgr, HashMap<String, String> failedSLAs) {
-		
+	public void postFailedSLAs(IConfig config, List<ActiveRecord> failedSLAs) throws Exception {
+		for (int i=0; i<failedSLAs.size(); i++) {
+			ActiveRecord rec = failedSLAs.get(0);
+			postActiveRecord(rec);
+		}
+	}
+
+	private void postActiveRecord(ActiveRecord rec) {
+		String transaction = "SLA_FAILED";
+		String id = rec.getId();
+		String instance = rec.getInstance();
+		long average = rec.getAverage();
+		long timeTaken = rec.getTimeDiff();
+		String message = rec.getFailedMessage();
+		postData(transaction,id,instance,average,timeTaken,message);
+	}
+
+	private void postData(String transaction, String id, String instance, long average, long timeTaken, String message) {
+			
 	}
 }
