@@ -1,3 +1,4 @@
+package com.appdynamics.analytics;
 import com.appdynamics.analytics.ConfigManager;
 import com.appdynamics.analytics.rest.RestManager;
 import com.appdynamics.analytics.util.DateHelper;

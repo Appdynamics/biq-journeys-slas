@@ -47,4 +47,22 @@ public class DateHelper {
 	private static Date localDateTimeToDate(LocalDateTime localDateTime) {
 	    return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 	}
+
+	public static long parseTime(String value) {
+		ZonedDateTime zdt = ZonedDateTime.parse(value);
+		return zdt.toInstant().toEpochMilli();
+	}
+
+	public static long diffTime(String value1, String value2) {
+		ZonedDateTime zdt = ZonedDateTime.parse(value1);
+		long val1 = zdt.toInstant().toEpochMilli();
+		zdt = ZonedDateTime.parse(value2);
+		long val2 = zdt.toInstant().toEpochMilli();
+		
+		if(val1 >= val2) {
+			return val1 - val2;
+		}else {
+			return val2 - val1;
+		}
+	}
 }

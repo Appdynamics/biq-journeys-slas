@@ -1,9 +1,10 @@
-package com.appdynamics.analytics;
+package com.appdynamics.analytics.sla;
 
 import java.util.HashMap;
 
 import org.json.simple.JSONArray;
 
+import com.appdynamics.analytics.ConfigManager;
 import com.appdynamics.analytics.rest.RestManager;
 import com.appdynamics.analytics.util.DateHelper;
 

@@ -1,3 +1,4 @@
+package com.appdynamics.analytics;
 import com.appdynamics.analytics.ConfigManager;
 
 

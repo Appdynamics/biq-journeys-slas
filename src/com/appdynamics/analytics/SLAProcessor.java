@@ -3,6 +3,7 @@ package com.appdynamics.analytics;
 import java.util.HashMap;
 
 import com.appdynamics.analytics.rest.RestManager;
+import com.appdynamics.analytics.sla.SLAManager;
 
 public class SLAProcessor {
 
