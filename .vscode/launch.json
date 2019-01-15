@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - RestManagerTest",
+            "request": "launch",
+            "mainClass": "RestManagerTest",
+            "projectName": "ms-portfolio-extension"
+        }
+    ]
+}
