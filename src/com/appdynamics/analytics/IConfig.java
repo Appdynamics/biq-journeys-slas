@@ -8,4 +8,20 @@ public interface IConfig {
 
 	String getAccessKey();
 
+	String getSchemaName();
+	
+	String getApplicationId();
+
+	String getRestUser();
+
+	String getRestPassword();
+
+	String getConrollerUrl();
+
+	String getCustomEventName();
+
+	long getDelay();
+
+	boolean createSchema();
+
 }

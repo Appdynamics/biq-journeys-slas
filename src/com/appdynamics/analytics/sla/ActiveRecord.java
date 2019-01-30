@@ -15,6 +15,7 @@ public class ActiveRecord {
 		this.startTime = _startTime;
 		this.compareTime = _compareTime;
 		this.instance = _instance;
+		this.average = 0l;
 	}
 
 	public String getId() {
@@ -35,7 +36,7 @@ public class ActiveRecord {
 	
 	
 	public String getFailedMessage() {
-		return "Time Taken "+getTimeDiff()+" (ms) Average "+this.average+" (ms) For Period : "+this.rangeMessage;
+		return "{message:'Time Taken "+getTimeDiff()+" (ms) Average "+this.average+" (ms) For Period : "+this.rangeMessage+"'}";
 	}
 
 	public long getAverage() {

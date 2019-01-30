@@ -1,5 +1,7 @@
 package com.appdynamics.analytics.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -64,5 +66,11 @@ public class DateHelper {
 		}else {
 			return val2 - val1;
 		}
+	}
+
+	public static String parseDate(long millis) {
+		Date d = new Date(millis);
+		DateFormat df = new SimpleDateFormat("dd:MM:yy:HH:mm:ss");
+		return df.format(d);
 	}
 }

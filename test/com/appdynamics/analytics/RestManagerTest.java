@@ -1,8 +1,9 @@
 package com.appdynamics.analytics;
-import com.appdynamics.analytics.ConfigManager;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.appdynamics.analytics.rest.RestManager;
-import com.appdynamics.analytics.util.DateHelper;
-import com.appdynamics.analytics.util.Range;
+import com.appdynamics.analytics.sla.ActiveRecord;
 
 
 public class RestManagerTest {
@@ -15,12 +16,19 @@ public class RestManagerTest {
 		
 		try {
 			
-			//Range range = new Range(1546149600000l,1547445599999l);
-			//Range range = DateHelper.getLastTwoWeeksSinceYesterday();
-			Range range = DateHelper.getTimeRangeForNow();
-			range.sysInfo();
-			Object results = restMgr.query(mgr, "SELECT * FROM aero WHERE Client_Requirements_with_Availabilities.cguid = '227703f8-0884-437b-9473-07dd0277979d'", range, 100);
-			System.out.println(results);
+//			Range range = DateHelper.getTimeRangeForNow();
+//			range.sysInfo();
+//			Object results = restMgr.query(mgr, "SELECT * FROM transactions", range, 10);
+//			System.out.println(results);
+			
+			ActiveRecord rec1 = new ActiveRecord("Route1","I1","2019-01-14T16:50:32.000Z","2019-01-14T15:50:32.000Z");
+			ActiveRecord rec2 = new ActiveRecord("Route2","I2","2019-01-14T16:50:32.000Z","2019-01-14T15:50:32.000Z");
+			List<ActiveRecord> records = new ArrayList<ActiveRecord>();
+			records.add(rec1);
+			records.add(rec2);
+			restMgr.postFailedSLAs(mgr,records);	
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

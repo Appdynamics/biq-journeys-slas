@@ -3,6 +3,7 @@ package com.appdynamics.analytics.sla;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.json.simple.JSONArray;
 
@@ -15,6 +16,7 @@ public class SLAManager {
 
 	public static final String RANGE_END = "range-end";
 	public static final String RANGE_START = "range-start";
+	private final static Logger LOGGER = Logger.getLogger(SLAManager.class.getName());
 	
 	ConfigManager configManager;
 	RestManager restManager;
@@ -83,9 +85,25 @@ public class SLAManager {
 	}
 
 	public boolean slaCheck(long average, long timeDifference) {
-		if(timeDifference < average) {
+		float percentageSLA = getPercent(average);
+		float diff = average * (percentageSLA/100f);
+		float sla = average + diff;
+		if(timeDifference > sla) {
 			return true;
 		}
 		return false;
+	}
+
+	private long getPercent(long average) {
+		HashMap<Long,Long> slas = configManager.getSLAs();
+		Long lastPercent = 0l;
+		for ( Long key : slas.keySet() ) {
+		    long convertToMillis = key.longValue() * 60 * 1000;
+		    lastPercent = slas.get(key);
+		    if(average < convertToMillis) {
+		    	break;
+		    }
+		}
+		return lastPercent;
 	}
 }
