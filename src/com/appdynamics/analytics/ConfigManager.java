@@ -13,7 +13,7 @@ public class ConfigManager implements IConfig {
 	String globalKey;
 	String accessKey;
 	String queryActive;
-	String queryAverage;
+	String queryBaseline;
 	String schemaName;
 	String appId;
 	String restUser;
@@ -22,7 +22,8 @@ public class ConfigManager implements IConfig {
 	String customEventName;
 	HashMap<Long,Long> slas;
 	long delay;
-	String schema;
+	String mode;
+	String dateFormat;
 	
 	public void init(String file){
 		try {
@@ -33,35 +34,32 @@ public class ConfigManager implements IConfig {
 			globalKey = (String)obj.get("globalKey");
 			accessKey = (String)obj.get("accessKey");
 			queryActive = (String) obj.get("queryActive");
-			queryAverage = (String)obj.get("queryAverage");
+			queryBaseline = (String)obj.get("queryBaseline");
 			schemaName = (String)obj.get("schemaName");
 			controllerUrl = (String)obj.get("controllerUrl");
 			restUser = (String)obj.get("restUser");
 			restPassword = (String)obj.get("restPassword");
 			appId = (String)obj.get("appId");
 			customEventName = (String)obj.get("customEventName");
-			schema = (String)obj.get("schema");
 			
 			JSONArray slaArray = (JSONArray)obj.get("sla"); 
 			slas = new HashMap<Long,Long>();
 			int size = slaArray.size();
 			for(int i=0; i<size; i++) {
 				JSONObject slaObj = (JSONObject) slaArray.get(i);
-				slas.put(new Long(slaObj.get("range-min").toString()), new Long(slaObj.get("percent").toString()));
+				slas.put(new Long(slaObj.get("range-min").toString()), new Long(slaObj.get("stdev").toString()));
 				
 			}
 			delay = (Long)obj.get("delay");
+			mode = (String)obj.get("mode");
+			dateFormat = (String)obj.get("dateFormat");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}	
 	}
 	
-	public void sysInfo() {
-		System.out.println("query :"+queryActive);
-		System.out.println("queryAverage :"+queryAverage);
-	}
-	
+		
 	public String getAnalyticsUrl(){
 		return analyticsUrl;
 	}
@@ -78,8 +76,8 @@ public class ConfigManager implements IConfig {
 		return queryActive;
 	}
 
-	public String getQueryAverage(){
-		return queryAverage;
+	public String getQueryBaseline(){
+		return queryBaseline;
 	}
 	
 	public String getSchemaName() {
@@ -109,17 +107,37 @@ public class ConfigManager implements IConfig {
 	public HashMap<Long, Long> getSLAs() {
 		return slas;
 	}
-
+	
+	public void setSLAs(HashMap<Long,Long> _slas){
+		slas = _slas;
+	}
+	
 	public long getDelay() {
 		return delay;
 	}
 
 	public boolean createSchema() {
-		return schema != null && schema.toLowerCase().equals("create");
+		return mode != null && mode.toLowerCase().equals("create-schema");
 	}
 
 	public boolean deleteSchema() {
-		return schema != null && schema.toLowerCase().equals("delete");
+		return mode != null && mode.toLowerCase().equals("delete-schema");
+	}
+	
+	public boolean isVerifyMode() {
+		return mode != null && mode.toLowerCase().equals("verify");
+	}
+
+	public boolean isTestMode() {
+		return mode != null && mode.toLowerCase().equals("test");
+	}
+	
+	public boolean isRunMode() {
+		return mode != null && mode.toLowerCase().equals("run");
+	}
+	
+	public String getDateFormat() {
+		return dateFormat;
 	}
 
 	

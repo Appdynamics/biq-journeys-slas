@@ -24,6 +24,8 @@ import com.appdynamics.analytics.util.Range;
 public class RestManager {
 	private final static Logger LOGGER = Logger.getLogger(RestManager.class.getName());
 	
+	Executor customExecutor;
+	
 	public JSONArray query(IConfig config,String query, Range range,int limit) throws Exception{
 		LOGGER.log(Level.INFO,"Range Start Date: "+DateHelper.parseDate(range.getStart()) + " Range End Date: "+DateHelper.parseDate(range.getEnd()));
 		String results = makeCall(config,query,range,limit);
@@ -71,7 +73,7 @@ public class RestManager {
 			String[] json = new String[size];
 			for (int i=0; i<failedSLAs.size(); i++) {
 				ActiveRecord rec = failedSLAs.get(0);
-				json[i] = getActiveRecordAsJSON(rec);
+				json[i] = getActiveRecordAsJSON(config,rec);
 			}
 			StringBuffer jsonResults = new StringBuffer("[");
 			jsonResults.append(String.join(",", json));
@@ -81,14 +83,13 @@ public class RestManager {
 		}
 	}
 
-	private String getActiveRecordAsJSON(ActiveRecord rec) throws Exception {
+	private String getActiveRecordAsJSON(IConfig config,ActiveRecord rec) throws Exception {
 		String transaction = "SLA_FAILED";
 		String id = rec.getId();
 		String instance = rec.getInstance();
-		long average = rec.getAverage();
-		long timeTaken = rec.getTimeDiff();
-		String message = rec.getFailedMessage();
-		return "{\"source\":\""+transaction+"\",\"id\":\""+id+"\",\"instance\":\""+instance+"\",\"average\":"+average+",\"time_taken\":"+timeTaken+",\"message\":\""+message+"\"}";
+		long timeTaken = rec.getTimeDiff(config.getDateFormat());
+		String message = rec.getFailedMessage(config.getDateFormat());
+		return "{\"source\":\""+transaction+"\",\"id\":\""+id+"\",\"instance\":\""+instance+"\",\"time_taken\":"+timeTaken+",\"message\":\""+message+"\"}";
 	}
 
 	public void postFailedSLAsData(IConfig config, String jsonData) throws ClientProtocolException, IOException {
@@ -98,16 +99,18 @@ public class RestManager {
 	
 	public String createSchema(IConfig config) throws Exception {
 		String url = config.getAnalyticsUrl()+"/events/schema/"+config.getSchemaName();
-		String schema = "{\"schema\" : { \"source\": \"string\", \"id\": \"string\", \"instance\": \"string\", \"average\": \"float\", \"time_taken\": \"integer\", \"message\": \"string\" } }";
+		String schema = "{\"schema\" : { \"source\": \"string\", \"id\": \"string\", \"instance\": \"string\", \"time_taken\": \"integer\", \"message\": \"string\" } }";
 		return postJSON(config,url,schema);
 	}
 	
 	public void postCustomEvent(IConfig config, int numSlas) throws Exception {
 		String url = config.getConrollerUrl()+"/controller/rest/applications/"+config.getApplicationId()+"/events";
-		Executor executor = Executor.newInstance()
-				.auth(config.getRestUser(),config.getRestPassword());
+		if(customExecutor == null) {
+			customExecutor = Executor.newInstance()
+					.auth(config.getRestUser(),config.getRestPassword());
+		}
 		
-		int result = executor.execute(Request.Post(url).bodyForm(Form.form()
+		int result = customExecutor.execute(Request.Post(url).bodyForm(Form.form()
 				.add("application_id", config.getApplicationId())
 				.add("summary", numSlas+" SLAs Breached")
 				.add("severity", "ERROR")
@@ -116,8 +119,9 @@ public class RestManager {
 				.build()
 		))
 		.returnResponse().getStatusLine().getStatusCode();
-		if(result != 200) {
-			throw new Exception("Error occurred while building custom event : status returned :"+result);
-		}
+		LOGGER.log(Level.INFO,"PostCustomEvent Status :"+result);
+//		if(result != 200) {
+//			throw new Exception("Error occurred while building custom event : status returned :"+result);
+//		}
 	}
 }

@@ -21,8 +21,8 @@ public class RestManagerTest {
 //			Object results = restMgr.query(mgr, "SELECT * FROM transactions", range, 10);
 //			System.out.println(results);
 			
-			ActiveRecord rec1 = new ActiveRecord("Route1","I1","2019-01-14T16:50:32.000Z","2019-01-14T15:50:32.000Z");
-			ActiveRecord rec2 = new ActiveRecord("Route2","I2","2019-01-14T16:50:32.000Z","2019-01-14T15:50:32.000Z");
+			ActiveRecord rec1 = new ActiveRecord("P1","I1","2019-01-14T16:50:32.000Z");
+			ActiveRecord rec2 = new ActiveRecord("P2","I2","2019-01-14T16:50:32.000Z");
 			List<ActiveRecord> records = new ArrayList<ActiveRecord>();
 			records.add(rec1);
 			records.add(rec2);

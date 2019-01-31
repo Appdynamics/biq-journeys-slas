@@ -1,6 +1,7 @@
 package com.appdynamics.analytics.util;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -50,22 +51,30 @@ public class DateHelper {
 	    return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 	}
 
-	public static long parseTime(String value) {
-		ZonedDateTime zdt = ZonedDateTime.parse(value);
-		return zdt.toInstant().toEpochMilli();
+	public static long parseTime(String format, String value) throws ParseException {
+		DateFormat df = new SimpleDateFormat(format);
+		return df.parse(value).getTime();
 	}
 
-	public static long diffTime(String value1, String value2) {
-		ZonedDateTime zdt = ZonedDateTime.parse(value1);
-		long val1 = zdt.toInstant().toEpochMilli();
-		zdt = ZonedDateTime.parse(value2);
-		long val2 = zdt.toInstant().toEpochMilli();
+	public static long diffTimeFromStrings(String format, String value1, String value2) throws ParseException {
+		DateFormat df = new SimpleDateFormat(format);
+		long val1 = df.parse(value1).getTime();
+		long val2 = df.parse(value2).getTime();
 		
 		if(val1 >= val2) {
 			return val1 - val2;
 		}else {
 			return val2 - val1;
 		}
+	}
+	
+	public static long diffTimeFromNow(String format, String time) throws ParseException {
+		DateFormat df = new SimpleDateFormat(format);
+		Date date1 = df.parse(time);
+		long val1 = date1.getTime();
+		Date date = new Date();
+		long val2 = date.getTime();
+		return val2 - val1;
 	}
 
 	public static String parseDate(long millis) {

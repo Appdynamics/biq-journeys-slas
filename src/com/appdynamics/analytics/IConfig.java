@@ -24,4 +24,12 @@ public interface IConfig {
 
 	boolean createSchema();
 
+	boolean isVerifyMode();
+
+	boolean isTestMode();
+
+	boolean isRunMode();
+
+	String getDateFormat();
+
 }
