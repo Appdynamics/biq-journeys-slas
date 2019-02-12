@@ -33,7 +33,7 @@ public class SLAManager {
 
 	public HashMap<String,Baseline> getBaselines() throws Exception{
 		HashMap<String,Baseline> averages = new HashMap<String,Baseline>();
-		Range range = DateHelper.getLastTwoWeeksSinceYesterday();
+		Range range = DateHelper.getBaseLineTimeRange(configManager.getBaselineDays());
 		
 		JSONArray jsonData = restManager.query(configManager, configManager.getQueryBaseline(), range, 15000);
 		for (int i=0; i < jsonData.size(); i++) {
@@ -51,7 +51,7 @@ public class SLAManager {
 	
 	public List<ActiveRecord> getActiveRecords() throws Exception{
 		List<ActiveRecord> slas = new ArrayList<ActiveRecord>();
-		JSONArray jsonData = restManager.query(configManager, configManager.getQueryActive(), DateHelper.getTimeRangeForNow(), 15000);
+		JSONArray jsonData = restManager.query(configManager, configManager.getQueryActive(), DateHelper.getTimeRangeForNow(configManager.getActivePeriodMinutes()), 15000);
 		for (int i=0; i < jsonData.size(); i++) {
 			JSONArray rec =  (JSONArray) jsonData.get(i);
 			String id = rec.get(0).toString();
@@ -71,7 +71,7 @@ public class SLAManager {
 			LOGGER.log(Level.SEVERE,"\nNo Baselines Found ...\n");
 			return failedSLAs;
 		}
-		Range range = DateHelper.getLastTwoWeeksSinceYesterday();
+		Range range = DateHelper.getBaseLineTimeRange(configManager.getBaselineDays());
 		
 		String message = range.getStart()+" : "+range.getEnd();
 		for(int i=0; i< activeRecords.size(); i++) {

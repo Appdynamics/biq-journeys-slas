@@ -11,20 +11,20 @@ import java.util.Date;
 
 public class DateHelper {
 
-	public static Range getTimeRangeForNow(){
+	public static Range getTimeRangeForNow(long minutes){
 		ZonedDateTime zdtNow = ZonedDateTime.now(ZoneId.systemDefault());
 		long end = zdtNow.toInstant().toEpochMilli();
-		zdtNow = zdtNow.minusDays(1);
+		zdtNow = zdtNow.minusMinutes(minutes);
 		long start = zdtNow.toInstant().toEpochMilli();
 		return new Range(start,end);
 	}
 
-	public static Range getLastTwoWeeksSinceYesterday(){
+	public static Range getBaseLineTimeRange(long days){
 		ZonedDateTime zdtNow = ZonedDateTime.now(ZoneId.systemDefault());
 		zdtNow = zdtNow.minusDays(1);
 		zdtNow = zdtNow.with(LocalTime.MAX);
 		long end = zdtNow.toInstant().toEpochMilli();
-		zdtNow = zdtNow.minusDays(14);
+		zdtNow = zdtNow.minusDays(days);
 		zdtNow = zdtNow.with(LocalTime.MIN);
 		long start = zdtNow.toInstant().toEpochMilli();
 		return new Range(start,end);

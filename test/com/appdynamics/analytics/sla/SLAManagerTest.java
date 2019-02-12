@@ -84,6 +84,11 @@ class SLAManagerTest {
 	
 	@Test
 	void test_IdDoesNotExist() throws ParseException {
+		
+		ConfigManager configManager = new ConfigManager();
+		configManager.init("config.json");
+		slaManager.setConfigManager(configManager);
+		
 		HashMap<String, Baseline> averages = new HashMap<String, Baseline>();
 		List<ActiveRecord> activeRecords = new ArrayList<ActiveRecord>();
 		activeRecords.add(new ActiveRecord("1","102","2019-01-14T15:50:32.000+0000"));
@@ -94,6 +99,10 @@ class SLAManagerTest {
 	
 	@Test
 	void test_NoData() throws ParseException {
+		ConfigManager configManager = new ConfigManager();
+		configManager.init("config.json");
+		slaManager.setConfigManager(configManager);
+		
 		HashMap<String, Baseline> averages = new HashMap<String, Baseline>();
 		List<ActiveRecord> activeRecords = new ArrayList<ActiveRecord>();
 		List<ActiveRecord> failedSLARecords = slaManager.verifySLAs(averages, activeRecords);

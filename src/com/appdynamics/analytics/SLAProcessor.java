@@ -23,7 +23,7 @@ public class SLAProcessor extends TimerTask {
 
 	public static void main(String[] args) throws Exception {
 		
-		LOGGER.log(Level.INFO,"Version : 1.0.10");
+		LOGGER.log(Level.INFO,"Version : 1.0.11");
 		
 		LOGGER.log(Level.INFO,"Init Configuration Manager ...");
 		

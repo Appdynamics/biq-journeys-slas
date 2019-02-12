@@ -24,6 +24,8 @@ public class ConfigManager implements IConfig {
 	long delay;
 	String mode;
 	String dateFormat;
+	long baselineDays;
+	long activePeriodMinutes;
 	
 	public void init(String file){
 		try {
@@ -53,6 +55,8 @@ public class ConfigManager implements IConfig {
 			delay = (Long)obj.get("delay");
 			mode = (String)obj.get("mode");
 			dateFormat = (String)obj.get("dateFormat");
+			baselineDays = (Long)obj.get("baselineDays");
+			activePeriodMinutes = (Long)obj.get("activePeriodMinutes");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -139,6 +143,13 @@ public class ConfigManager implements IConfig {
 	public String getDateFormat() {
 		return dateFormat;
 	}
+	
+	public long getBaselineDays() {
+		return baselineDays;
+	}
 
+	public long getActivePeriodMinutes() {
+		return activePeriodMinutes;
+	}
 	
 }

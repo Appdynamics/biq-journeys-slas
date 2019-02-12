@@ -36,8 +36,10 @@ class DateHelperTest {
 	}
 	
 	@Test
-	void testConversions() {
-		Double d = new Double(new Long(15));
+	void testRange() {
+		Range range = DateHelper.getTimeRangeForNow(14);
+		assertNotNull(DateHelper.parseDate(range.getStart()));
+		assertNotNull(DateHelper.parseDate(range.getEnd()));
 	}
 
 	
